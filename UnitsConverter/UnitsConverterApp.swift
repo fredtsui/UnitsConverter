@@ -25,7 +25,7 @@ struct UnitsConverterApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            FormatterAttempt()
         }
         .modelContainer(sharedModelContainer)
     }

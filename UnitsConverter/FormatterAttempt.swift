@@ -12,8 +12,13 @@ struct FormatterAttempt: View {
     // variables
     @State var fromAmount = 0.0
     @State var toAmount = 0.0
-    @State var selectedFromUnit = "meters"
+    @State var selectedFromUnit = ""
     @State var selectedToUnit = ""
+    let unitStyle = Measurement<UnitLength>.FormatStyle(
+        width: .abbreviated,
+        usage: .asProvided,
+        numberFormatStyle: .number.precision(.fractionLength(1))
+    )
     
     // list of units to choose from
     let listOfUnits = ["meters", "feet"]
@@ -40,12 +45,12 @@ struct FormatterAttempt: View {
                     
                     Spacer()
                     if selectedFromUnit == "meters" {
-                        var switchToMeasurement = Measurement(value: fromAmount, unit: UnitLength.meters).converted(to: UnitLength.feet)
-                        Text("\(switchToMeasurement.formatted(.measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: .number.precision(.fractionLength(1)))))")
+                        let switchToMeasurement = Measurement(value: fromAmount, unit: UnitLength.meters).converted(to: UnitLength.feet)
+                        Text("\(switchToMeasurement.formatted(unitStyle))")
                             .font(.largeTitle)
                     } else {
-                        var switchToMeasurement = Measurement(value: fromAmount, unit: UnitLength.feet).converted(to: UnitLength.meters)
-                        Text("\(switchToMeasurement.formatted(.measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: .number.precision(.fractionLength(1)))))")
+                        let switchToMeasurement = Measurement(value: fromAmount, unit: UnitLength.feet).converted(to: UnitLength.meters)
+                        Text("\(switchToMeasurement.formatted(unitStyle))")
                             .font(.largeTitle)
                     }
                     

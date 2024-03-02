@@ -12,7 +12,7 @@ struct FormatterAttempt: View {
     // variables
     @State var fromAmount = 0.0
     @State var toAmount = 0.0
-    @State var selectedFromUnit = ""
+    @State var selectedFromUnit = "meters"
     @State var selectedToUnit = ""
     
     // list of units to choose from
@@ -32,21 +32,30 @@ struct FormatterAttempt: View {
                     .pickerStyle(.segmented)
                     TextField("Enter Amount to:", value: $fromAmount, format: .number)
                         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
+                        .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                 }
                 Spacer()
                 // display the converted units
                 HStack{
-                    Picker("Select Unit to Convert From", selection: $selectedToUnit) {
-                        ForEach(listOfUnits, id: \.self) {
-                            Text($0)
-                        }
-                    }
-                    .pickerStyle(.segmented)
+                    
                     Spacer()
-                    Text("displayConverted")
-                        .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
+                    if selectedFromUnit == "meters" {
+                        var switchToMeasurement = Measurement(value: fromAmount, unit: UnitLength.meters).converted(to: UnitLength.feet)
+                        Text("\(switchToMeasurement.formatted(.measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: .number.precision(.fractionLength(1)))))")
+                            .font(.largeTitle)
+                    } else {
+                        var switchToMeasurement = Measurement(value: fromAmount, unit: UnitLength.feet).converted(to: UnitLength.meters)
+                        Text("\(switchToMeasurement.formatted(.measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: .number.precision(.fractionLength(1)))))")
+                            .font(.largeTitle)
+                    }
+                    
                 }
-
+            }
+            Section{
+                Text("To units selected is: \(selectedFromUnit)")
+                Text(selectedToUnit)
+                var switchToMeasurement = Measurement(value: fromAmount, unit: UnitLength.meters).converted(to: UnitLength.feet)
+                Text("\(switchToMeasurement.formatted())")
                 
             }
         }
